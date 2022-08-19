@@ -17,6 +17,7 @@ export default class Searchbar extends Component {
       toast.warn('uncorrect value', { theme: 'dark' });
       return;
     }
+
     onSubmit(this.state.q);
     this.setState({ q: '' });
   };

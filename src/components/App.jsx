@@ -2,27 +2,25 @@ import { Component } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Searchbar from './Searchbar/Searchbar';
-import Pixabay from './pixabay-api';
+import Pixabay from './pixabayApi';
 import ImageGallery from './ImageGallery/ImageGallery';
-import ImageGalleryItem from './ImageGallery/ImageGalleryItem';
 import Button from './Button/Button';
 
 import s from './app.module.css';
+
 export class App extends Component {
   state = {
     images: [],
-    loading: true,
-    q: 'pirates',
+    loading: false,
+    q: 'red',
   };
 
   async componentDidMount() {
-    const galleryApi = new Pixabay();
-    // this.setState({ loading: true });
+    this.setState({ loading: true });
 
     try {
-      const responce = await galleryApi.fetchPhotosByQuery();
+      const responce = await Pixabay(2, 'pirates');
       this.setState({ images: responce.data.hits });
-      console.log(responce.data.hits[1].webformatURL);
     } catch (error) {
       console.log(error);
     } finally {
@@ -35,6 +33,8 @@ export class App extends Component {
     toast.success('hendleFormSubmit');
   };
 
+  loadMore = e => {};
+
   render() {
     const { loading, images } = this.state;
 
@@ -46,7 +46,7 @@ export class App extends Component {
         ) : (
           <div>
             <ImageGallery images={images} />
-            <Button value={'Load more'} />
+            <Button value={'Load more'} onBtnClick={this.loadMore} />
             <ToastContainer autoClose={2000} hideProgressBar={true} />
           </div>
         )}
