@@ -10,29 +10,24 @@ export default class ImageGallery extends Component {
   state = {
     images: [],
     q: null,
-    loading: false,
+    loading: true,
     page: 1,
   };
 
-  async componentDidUpdate(prevRrops, prevState) {
-    const { searchImages } = this.props;
-    const { q, page } = this.state;
-
-    // if (searchImages !== q) {
-    //   this.setState({ page: 1 });
-    // }
-
-    console.log(q);
-    // this.setState({ loading: true });
-
-    if (searchImages !== q || page !== prevState.page) {
+  async componentDidUpdate(prevProps, prevState) {
+    const { page } = this.state;
+    const prevImg = prevProps.searchImages;
+    const currentName = this.props.searchImages;
+    console.log(prevState);
+    if (prevImg !== currentName) {
       try {
-        const responce = await Pixabay(page, searchImages);
-        this.setState({ images: responce.data.hits, q: searchImages });
+        this.setState({ page: 1 });
+        const responce = await Pixabay(page, currentName);
+        this.setState({ images: responce.data.hits });
       } catch (error) {
         console.log(error);
       } finally {
-        // this.setState({ loading: false });
+        this.setState({ loading: false });
       }
     }
   }
@@ -56,7 +51,11 @@ export default class ImageGallery extends Component {
             />
           ))}
         </ul>
-        <Button value={'Load more'} onBtnClick={this.loadMore} />
+        {loading ? (
+          <div>loading...</div>
+        ) : (
+          <Button value={'Load more'} onBtnClick={this.loadMore} />
+        )}
       </>
     );
   }
