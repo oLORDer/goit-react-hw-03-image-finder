@@ -9,8 +9,6 @@ import s from './app.module.css';
 
 export class App extends Component {
   state = {
-    images: [],
-    loading: false,
     q: null,
   };
 
