@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
+import { InfinitySpin } from 'react-loader-spinner';
 
 import Pixabay from 'components/pixabayApi';
 import ImageGalleryItem from './ImageGalleryItem';
@@ -12,19 +13,22 @@ export default class ImageGallery extends Component {
     images: null,
     loading: false,
     page: 1,
-    status: 'idle',
+    total: null,
   };
 
   async componentDidUpdate(prevProps, prevState) {
-    const { page } = this.state;
+    const { page, images } = this.state;
     const prevImg = prevProps.searchImages;
     const currentName = this.props.searchImages;
-    console.log(prevState);
+    // console.log(images);
     if (prevImg !== currentName) {
       try {
         this.setState({ page: 1, loading: true });
         const responce = await Pixabay(page, currentName);
-        this.setState({ images: responce.data.hits });
+        this.setState({
+          images: responce.data.hits,
+          total: responce.data.total,
+        });
       } catch (error) {
         this.setState({ error });
         console.log(error);
@@ -56,52 +60,37 @@ export default class ImageGallery extends Component {
     this.setState({ page: nextPage });
   };
 
+  modalOpen = ({ target }) => {
+    console.log(target);
+  };
+
   render() {
-    const { images, loading, status } = this.state;
-
-    // if (status === 'idle') {
-    //   return;
-    // }
-
-    // if (status === 'pending') {
-    //   return;
-    // }
-    // if (status === 'rejected') {
-    //   return;
-    // }
-    // if (status === 'resolved') {
-    //   return (
-    //     images && (
-    //       <ul className={s.gallery}>
-    //         {images.map(({ id, webformatURL, largeImageURL }) => (
-    //           <ImageGalleryItem
-    //             key={nanoid()}
-    //             id={id}
-    //             url={webformatURL}
-    //             largeUrl={largeImageURL}
-    //           />
-    //         ))}
-    //       </ul>
-    //     )
-    //   );
-    // }
+    const { images, loading, page, total } = this.state;
 
     return (
       <>
-        {loading && <div>loading...</div>}
-        {images && (
-          <ul className={s.gallery}>
-            {images.map(({ id, webformatURL, largeImageURL }) => (
-              <ImageGalleryItem
-                key={nanoid()}
-                id={id}
-                url={webformatURL}
-                largeUrl={largeImageURL}
-              />
-            ))}
-          </ul>
+        {loading && (
+          <div className={s.loader}>
+            <InfinitySpin width="300" color="#7021DE" />
+          </div>
         )}
-        <Button value={'Load more'} onBtnClick={this.loadMore} />
+        {images && (
+          <>
+            <ul className={s.gallery} onClick={this.modalOpen}>
+              {images.map(({ id, webformatURL, largeImageURL }) => (
+                <ImageGalleryItem
+                  key={nanoid()}
+                  id={id}
+                  url={webformatURL}
+                  largeUrl={largeImageURL}
+                />
+              ))}
+            </ul>
+            {12 * page <= total && (
+              <Button value={'Load more'} onBtnClick={this.loadMore} />
+            )}
+          </>
+        )}
       </>
     );
   }
