@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 import Searchbar from './Searchbar/Searchbar';
-import Pixabay from './pixabayApi';
 import ImageGallery from './ImageGallery/ImageGallery';
 
 import s from './app.module.css';
@@ -22,7 +22,7 @@ export class App extends Component {
   };
 
   render() {
-    const { loading, q } = this.state;
+    const { q } = this.state;
 
     return (
       <div className={s.app}>

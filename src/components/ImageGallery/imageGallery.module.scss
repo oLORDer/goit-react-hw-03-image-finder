@@ -1,3 +1,7 @@
+main {
+  position: relative;
+}
+
 .gallery {
   display: grid;
   // max-width: calc(100vw - 48px);
@@ -28,21 +32,4 @@
 .item img:hover {
   transform: scale(1.03);
   cursor: zoom-in;
-}
-
-.loader {
-  position: absolute;
-  background-color: rgba(207, 203, 203, 0.199);
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:svg {
-    width: 1500px;
-    &:path {
-      stroke-width: 10;
-    }
-  }
 }

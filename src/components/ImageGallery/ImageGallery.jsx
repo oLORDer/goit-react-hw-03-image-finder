@@ -1,10 +1,10 @@
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
-import { InfinitySpin } from 'react-loader-spinner';
 
 import Pixabay from 'components/pixabayApi';
 import ImageGalleryItem from './ImageGalleryItem';
 import Button from 'components/Button/Button';
+import Loader from 'components/Loader/Loader';
 
 import s from './imageGallery.module.scss';
 
@@ -17,10 +17,10 @@ export default class ImageGallery extends Component {
   };
 
   async componentDidUpdate(prevProps, prevState) {
-    const { page, images } = this.state;
+    const { page } = this.state;
     const prevImg = prevProps.searchImages;
     const currentName = this.props.searchImages;
-    // console.log(images);
+
     if (prevImg !== currentName) {
       try {
         this.setState({ page: 1, loading: true });
@@ -69,11 +69,7 @@ export default class ImageGallery extends Component {
 
     return (
       <>
-        {loading && (
-          <div className={s.loader}>
-            <InfinitySpin width="300" color="#7021DE" />
-          </div>
-        )}
+        {loading && <Loader />}
         {images && (
           <>
             <ul className={s.gallery} onClick={this.modalOpen}>

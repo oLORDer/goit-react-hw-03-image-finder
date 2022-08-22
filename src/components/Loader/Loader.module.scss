@@ -1,0 +1,18 @@
+.loader {
+  position: absolute;
+  bottom: 0;
+  right: -3%;
+  background-color: rgba(207, 203, 203, 0.199);
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:svg {
+    width: 1500px;
+    &:path {
+      stroke-width: 10;
+    }
+  }
+}
