@@ -1,10 +1,12 @@
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
+import PropTypes from 'prop-types';
 
 import Pixabay from 'components/pixabayApi';
 import ImageGalleryItem from './ImageGalleryItem';
 import Button from 'components/Button/Button';
 import Loader from 'components/Loader/Loader';
+import Modal from 'components/Modal/Modal';
 
 import s from './imageGallery.module.scss';
 
@@ -14,6 +16,7 @@ export default class ImageGallery extends Component {
     loading: false,
     page: 1,
     total: null,
+    largePageSrc: '',
   };
 
   async componentDidUpdate(prevProps, prevState) {
@@ -60,25 +63,26 @@ export default class ImageGallery extends Component {
     this.setState({ page: nextPage });
   };
 
-  modalOpen = ({ target }) => {
-    console.log(target);
+  modalOpen = largePageSrc => {
+    this.setState({ largePageSrc });
   };
 
   render() {
-    const { images, loading, page, total } = this.state;
+    const { images, loading, page, total, largePageSrc } = this.state;
 
     return (
       <>
         {loading && <Loader />}
         {images && (
           <>
-            <ul className={s.gallery} onClick={this.modalOpen}>
+            <ul className={s.gallery}>
               {images.map(({ id, webformatURL, largeImageURL }) => (
                 <ImageGalleryItem
                   key={nanoid()}
                   id={id}
                   url={webformatURL}
                   largeUrl={largeImageURL}
+                  onClickFunc={this.modalOpen}
                 />
               ))}
             </ul>
@@ -87,7 +91,14 @@ export default class ImageGallery extends Component {
             )}
           </>
         )}
+        {largePageSrc && (
+          <Modal src={largePageSrc} onModalFunc={this.modalOpen} />
+        )}
       </>
     );
   }
 }
+
+ImageGallery.propTypes = {
+  searchImages: PropTypes.string,
+};

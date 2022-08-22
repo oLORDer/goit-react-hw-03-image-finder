@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import s from './button.module.scss';
 
 export default function Button({ value, type = 'button', onBtnClick }) {
@@ -9,3 +10,8 @@ export default function Button({ value, type = 'button', onBtnClick }) {
     </div>
   );
 }
+
+Button.propTypes = {
+  value: PropTypes.string,
+  onBtnClick: PropTypes.func,
+};
